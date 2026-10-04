@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  MESSAGE: "Hello from Kubernetes Workshop ConfigMap!"
+  THEME: "dark"
