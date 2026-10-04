@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nagios-deployment
+  namespace: nagios
+  labels:
+    app: nagios
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nagios
+  template:
+    metadata:
+      labels:
+        app: nagios
+    spec:
+      containers:
+      - name: nagios-container
+        image: jasonrivers/nagios:latest
+        ports:
+        - containerPort: 80
+          name: http
+        env:
+        - name: NAGIOSADMIN_USER
+          value: "nagiosadmin"
+        - name: NAGIOSADMIN_PASS
+          value: "YourPassword123"
+        volumeMounts:
+        - name: nagios-custom-cfg
+          mountPath: /opt/nagios/etc/objects/k8s-services.cfg
+          subPath: k8s-services.cfg
+      volumes:
+      - name: nagios-custom-cfg
+        configMap:
+          name: nagios-custom-config
