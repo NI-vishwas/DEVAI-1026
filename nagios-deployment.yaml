@@ -34,3 +34,17 @@ spec:
       - name: nagios-custom-cfg
         configMap:
           name: nagios-custom-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nagios-service
+  namespace: nagios
+spec:
+  type: NodePort  # Change to LoadBalancer for cloud providers (AWS/GCP/Azure)
+  selector:
+    app: nagios
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30008
