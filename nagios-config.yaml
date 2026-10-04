@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nagios-custom-config
+  namespace: nagios
+data:
+  k8s-services.cfg: |
+    define host {
+        use                     generic-host
+        host_name               kubernetes-apiserver
+        alias                   Kubernetes API Server
+        address                 kubernetes.default.svc.cluster.local
+    }
+
+    define service {
+        use                     generic-service
+        host_name               kubernetes-apiserver
+        service_description     HTTPS Check API Server
+        check_command           check_http!-S!--sni!-p 443!-u /healthz
+    }
